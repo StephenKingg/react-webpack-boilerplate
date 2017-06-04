@@ -1,0 +1,60 @@
+{
+  "name": "react-starter",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=6.10",
+    "npm": ">=3.10"
+  },
+  "browserslist": [
+    ">1%",
+    "not ie < 9"
+  ],
+  "description": "react starter",
+  "main": "index.js",
+  "author": "Stephen King",
+  "license": "MIT",
+  "scripts": {
+    "start": "cross-env NODE_ENV=development webpack-dev-server --debug --devtool eval-cheap-module-source-map --output-pathinfo --open",
+    "build": "rm -rf dist && cross-env NODE_ENV=production webpack --optimize-minimize --progress --profile --colors",
+    "test": ""
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.23.0",
+    "babel-runtime": "^6.23.0",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4"
+  },
+  "devDependencies": {
+    "autoprefixer": "^7.1.1",
+    "babel-cli": "^6.24.1",
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.5.1",
+    "babel-preset-react": "^6.24.1",
+    "browserslist": "^2.1.4",
+    "cross-env": "^5.0.0",
+    "css-loader": "^0.28.4",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^15.0.1",
+    "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-jsx-a11y": "^5.0.3",
+    "eslint-plugin-react": "^7.0.1",
+    "extract-text-webpack-plugin": "^2.1.0",
+    "file-loader": "^0.11.1",
+    "html-webpack-plugin": "^2.28.0",
+    "postcss-loader": "^2.0.5",
+    "react-hot-loader": "next",
+    "sass-loader": "^6.0.5",
+    "style-loader": "^0.18.1",
+    "stylelint": "^7.10.1",
+    "stylelint-scss": "^1.4.4",
+    "stylelint-selector-bem-pattern": "^1.0.0",
+    "uglify-js": "^3.0.15",
+    "uglifyjs-webpack-plugin": "^0.4.3",
+    "url-loader": "^0.5.8",
+    "webpack": "^2.6.1",
+    "webpack-dev-server": "^2.4.5"
+  }
+}
