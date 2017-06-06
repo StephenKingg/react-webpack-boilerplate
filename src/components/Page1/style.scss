@@ -1,0 +1,15 @@
+.btn {
+  width: 180px;
+  height: 40px;
+  background-color: teal;
+  color: maroon;
+  font-size: 18px;
+  line-height: 40px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+
+.btn:hover {
+  background-color: navajowhite;
+}

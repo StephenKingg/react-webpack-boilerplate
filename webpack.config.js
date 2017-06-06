@@ -1,40 +1,49 @@
 const path = require('path');
 const webpack = require('webpack');
-const autoprefixer = require('autoprefixer');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
-const extractCss = new ExtractTextPlugin({
+const extractCSS = new ExtractTextPlugin({
   filename: 'style.[contenthash].css',
   allChunks: true,
 });
 
 const config = {
-  entry: ['babel-polyfill', 'react-hot-loader/patch', './src/app.js'],
+  entry: {
+    app: './src/index.jsx',
+    vendor: ['babel-polyfill', 'whatwg-fetch', 'react-hot-loader/patch'],
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'app.[hash].js',
+    filename: '[name].[hash].js',
   },
-  devtool: 'cheap-eval-source-map',
   module: {
     rules: [
       {
         test: /\.s?css$/,
         include: [path.resolve(__dirname, 'src')],
-        use: extractCss.extract({
+        use: extractCSS.extract({
           use: [
             {
               loader: 'css-loader',
-              options: { sourceMap: true },
+              options: {
+                modules: true,
+                localIdentName: '[path][name]__[local]--[hash:base64:5]',
+              },
             },
             {
               loader: 'sass-loader',
-              options: { sourceMap: true },
+              options: {
+                importLoaders: 1,
+              },
             },
             {
               loader: 'postcss-loader',
-              options: { autoprefixer },
+              options: {
+                plugins: loader => [require('autoprefixer')()],
+              },
             },
           ],
           fallback: 'style-loader',
@@ -45,9 +54,6 @@ const config = {
         include: [path.resolve(__dirname, 'src')],
         exclude: [path.resolve(__dirname, 'node_modules')],
         use: [
-          {
-            loader: 'react-hot-loader/webpack',
-          },
           {
             loader: 'babel-loader',
           },
@@ -83,20 +89,35 @@ const config = {
         context: __dirname,
       },
     }),
-    extractCss,
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'src/index.html',
     }),
+    extractCSS,
   ],
 };
 
 if (process.env.NODE_ENV === 'production') {
   console.log(`${process.env.NODE_ENV} mode.`);
 
-  config.devtool = 'source-map';
+  config.devtool = false;
 
   config.plugins.push(
+    new CopyWebpackPlugin([
+      {
+        from: './src/common',
+        to: './common',
+      }, {
+        from: './index.js',
+        to: './index.js',
+      }, {
+        from: './start.bat',
+        to: './start.bat',
+      }, {
+        from: './src/config.js',
+        to: './config.js',
+      }
+    ]),
     new UglifyJSPlugin({
       compress: {
         sequences: true,
@@ -119,23 +140,28 @@ if (process.env.NODE_ENV === 'production') {
       },
       mangle: true,
       sourceMap: true,
-    })
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      filename: 'vendor.js',
+    }),
   );
 } else {
   console.log(`${process.env.NODE_ENV} mode.`);
 
-  // config.devtool = 'inline-source-map';
   config.devtool = 'eval';
 
   config.plugins.push(new webpack.HotModuleReplacementPlugin());
 
   config.devServer = {
-    contentBase: path.join(__dirname, 'dist'),
+    contentBase: path.join(__dirname, 'src'),
     compress: true,
     historyApiFallback: true,
     port: 9000,
     host: '127.0.0.1',
+    inline: true,
     hot: true,
+    open: true,
   };
 }
 
