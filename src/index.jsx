@@ -4,8 +4,8 @@ import { AppContainer } from 'react-hot-loader';
 
 import Routes from './Routes';
 
-import './css/reset.css';
-import './css/base.css';
+import './global/reset.css';
+import './global/base.css';
 
 const renderAPP = (Component) => {
   ReactDOM.render(

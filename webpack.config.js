@@ -108,12 +108,6 @@ if (process.env.NODE_ENV === 'production') {
         from: './src/common',
         to: './common',
       }, {
-        from: './index.js',
-        to: './index.js',
-      }, {
-        from: './start.bat',
-        to: './start.bat',
-      }, {
         from: './src/config.js',
         to: './config.js',
       }

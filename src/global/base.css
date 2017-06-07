@@ -28,6 +28,7 @@ body {
   -moz-user-select: none;
   -ms-user-select: none;  /* IE 10+ */
   user-select: none;
+  cursor: default;
 }
 
 /* hide text */
