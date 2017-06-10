@@ -1,37 +1,42 @@
 body {
-  font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Source Han Sans SC", "Source Han Sans CN", "WenQuanYi Micro Hei", Roboto, "Heiti SC", "Microsoft JhengHei", "Microsoft YaHei", sans-serif;
-  -webkit-font-smoothing: antialiased;
+  font-family: 'Helvetica Neue', Helvetica, Arial, 'PingFang SC', 'Hiragino Sans GB', 'Source Han Sans SC', 'Source Han Sans CN', 'WenQuanYi Micro Hei', Roboto, 'Heiti SC', 'Microsoft JhengHei', 'Microsoft YaHei', sans-serif;
 }
 
-/* https://css-tricks.com/snippets/css/clear-fix/ */
-/* Comparing the former "clearfix": it became popular to use "group" as a class name, which is nicer and more semantic */
-/* group */
-.group:after {
+/**
+ * Start group
+ * https://css-tricks.com/snippets/css/clear-fix/
+ * Comparing the former "clearfix": it became popular to use "group" as a class name, which is nicer and more semantic
+ */
+.group:after,
+.group::after {
   display: block;
   visibility: hidden;
   clear: both;
   height: 0;
-  content: "";
+  content: '';
 }
 
+/* IE6 */
 * html .group {
-  zoom: 1;  /* IE6 */
+  zoom: 1;
 }
 
+/* IE7 */
 *:first-child + html .group {
-  zoom: 1;  /* IE7 */
+  zoom: 1;
 }
+
 /* End group */
 
 .sn {
   -webkit-user-select: none;
   -moz-user-select: none;
-  -ms-user-select: none;  /* IE 10+ */
+  -ms-user-select: none;
   user-select: none;
   cursor: default;
 }
 
-/* hide text */
+/* Start hide text */
 .ht {
   font-size: 0;
   visibility: hidden;
@@ -40,9 +45,10 @@ body {
   height: 0;
   text-indent: -999999px;
 }
+
 /* End hide text */
 
-/* marquee alike
+/* Start marquee alike
  * <div class="marquee"><p>abcdefghijklmn</p></div>
  */
 .marquee {
@@ -51,7 +57,7 @@ body {
   box-sizing: border-box;
   width: 450px;
   white-space: nowrap;
-  color: white;
+  color: #ffffff;
   background-color: red;
 }
 
@@ -70,17 +76,19 @@ body {
     transform: translate(-100%, 0);
   }
 }
+
 /* End marquee alike */
 
-/* text-overflow */
+/* Start text-overflow */
 .ellipsis {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
 /* End text-overflow */
 
-/* scrollbar */
+/* Start scrollbar */
 ::-webkit-scrollbar {
   width: 12px;
 }
@@ -102,4 +110,5 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background-color: rgb(210, 210, 210);
 }
+
 /* End scrollbar */

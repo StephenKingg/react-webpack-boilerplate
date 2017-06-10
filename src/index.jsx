@@ -20,7 +20,6 @@ renderAPP(Routes);
 
 if (module.hot) {
   module.hot.accept('./Routes', () => {
-    const next = require('./Routes').default;
-    renderAPP(next);
+    renderAPP(Routes);
   });
 }

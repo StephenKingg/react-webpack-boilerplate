@@ -21,7 +21,7 @@ class Root extends Component {
   render() {
     return (
       <div className={style.btn} role="menuitem" onClick={this.handleClick} tabIndex={0}>
-        Hello, world!
+        Hello, world!JavaScript
       </div>
     );
   }

@@ -43,7 +43,6 @@
     "browserslist": "^2.1.4",
     "copy-webpack-plugin": "^4.0.1",
     "cross-env": "^5.0.0",
-    "css-hot-loader": "^1.1.1",
     "css-loader": "^0.28.4",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^15.0.1",
