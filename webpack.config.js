@@ -5,6 +5,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
+const Dashboard = require('webpack-dashboard');
+const DashboardPlugin = require('webpack-dashboard/plugin');
+const dashboard = new Dashboard();
+
+const myPort = 9001;
+
 const extractCSS = new ExtractTextPlugin({
   filename: 'style.[contenthash].css',
   allChunks: true,
@@ -75,32 +81,37 @@ const config = {
     ],
   },
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: ['.js', '.jsx']
   },
 
   plugins: [
+    new DashboardPlugin({
+      port: myPort,
+      handler: dashboard.setData
+    }),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
-      },
+      }
     }),
     new webpack.LoaderOptionsPlugin({
       options: {
         context: __dirname,
-      },
+      }
     }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: 'src/index.html',
+      template: 'src/index.html'
     }),
-    extractCSS,
-  ],
+    extractCSS
+  ]
 };
 
 if (process.env.NODE_ENV === 'production') {
   console.log(`${process.env.NODE_ENV} mode.`);
 
-  config.devtool = false;
+  config.devtool = 'source-map';
+  // config.devtool = false;
 
   config.plugins.push(
     new CopyWebpackPlugin([
@@ -112,6 +123,14 @@ if (process.env.NODE_ENV === 'production') {
         to: './config.js',
       }
     ]),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      filename: 'vendor.js',
+    }),
+    new webpack.SourceMapDevToolPlugin({
+      filename: '[name].js.map',
+      exclude: ['vendor.js']
+    }),
     new UglifyJSPlugin({
       compress: {
         sequences: true,
@@ -135,10 +154,7 @@ if (process.env.NODE_ENV === 'production') {
       mangle: true,
       sourceMap: true,
     }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      filename: 'vendor.js',
-    }),
+
   );
 } else {
   console.log(`${process.env.NODE_ENV} mode.`);
@@ -151,9 +167,10 @@ if (process.env.NODE_ENV === 'production') {
     contentBase: path.join(__dirname, 'src'),
     compress: true,
     historyApiFallback: true,
-    port: 9000,
+    port: myPort,
     host: '127.0.0.1',
     inline: true,
+    quiet: true,
     hot: true,
     open: true,
   };

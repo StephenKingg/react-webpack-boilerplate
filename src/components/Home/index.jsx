@@ -28,7 +28,7 @@ export default class Home extends Component {
   }
 
   render() {
-    let pageTitle = '登录';
+    let pageTitle = 'Hello, React!';
     const { location } = this.props;
 
     switch (location.pathname) {

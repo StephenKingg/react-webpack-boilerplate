@@ -1,3 +1,6 @@
+# production
+dist
+
 # Logs
 logs
 *.log
