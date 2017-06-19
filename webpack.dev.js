@@ -24,6 +24,7 @@ const config = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].[hash].js',
+    pathinfo: true,
   },
   module: {
     rules: [
@@ -66,8 +67,27 @@ const config = {
         ],
       },
       {
-        test: /\.(jpg|png|gif)$/,
-        use: 'file-loader',
+        test: /\.(jpe?g|png|svg|gif)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            query: {
+              name: '[name].[ext]',
+            },
+          },
+          {
+            loader: 'image-webpack-loader',
+            query: {
+              progressive: true,
+              optimizationLevel: 7,
+              interlaced: false,
+              pngquant: {
+                quality: '65-90',
+                speed: 4,
+              },
+            },
+          },
+        ],
       },
       {
         test: /\.(woff|woff2|eot|ttf|svg)$/,
@@ -81,89 +101,30 @@ const config = {
     ],
   },
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx'],
   },
-
+  devtool: 'eval',
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': '"development"',
+    }),
     new DashboardPlugin({
       port: myPort,
-      handler: dashboard.setData
+      handler: dashboard.setData,
     }),
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
-      }
-    }),
+    new webpack.HotModuleReplacementPlugin(),
     new webpack.LoaderOptionsPlugin({
       options: {
         context: __dirname,
-      }
+      },
     }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: 'src/index.html'
+      template: 'src/index.html',
     }),
-    extractCSS
-  ]
-};
-
-if (process.env.NODE_ENV === 'production') {
-  console.log(`${process.env.NODE_ENV} mode.`);
-
-  config.devtool = 'source-map';
-  // config.devtool = false;
-
-  config.plugins.push(
-    new CopyWebpackPlugin([
-      {
-        from: './src/common',
-        to: './common',
-      }, {
-        from: './src/config.js',
-        to: './config.js',
-      }
-    ]),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      filename: 'vendor.js',
-    }),
-    new webpack.SourceMapDevToolPlugin({
-      filename: '[name].js.map',
-      exclude: ['vendor.js']
-    }),
-    new UglifyJSPlugin({
-      compress: {
-        sequences: true,
-        properties: true,
-        dead_code: true,
-        drop_debugger: true,
-        unsafe: false,
-        conditionals: true,
-        comparisons: true,
-        evaluate: true,
-        booleans: true,
-        loops: true,
-        unused: true,
-        hoist_vars: false,
-        if_return: true,
-        join_vars: true,
-        cascade: true,
-        side_effects: true,
-        warnings: false,
-      },
-      mangle: true,
-      sourceMap: true,
-    }),
-
-  );
-} else {
-  console.log(`${process.env.NODE_ENV} mode.`);
-
-  config.devtool = 'eval';
-
-  config.plugins.push(new webpack.HotModuleReplacementPlugin());
-
-  config.devServer = {
+    extractCSS,
+  ],
+  devServer: {
     contentBase: path.join(__dirname, 'src'),
     compress: true,
     historyApiFallback: true,
@@ -173,7 +134,9 @@ if (process.env.NODE_ENV === 'production') {
     quiet: true,
     hot: true,
     open: true,
-  };
-}
+  },
+};
+
+console.log(`${process.env.NODE_ENV} mode.`);
 
 module.exports = config;

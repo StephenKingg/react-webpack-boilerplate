@@ -1,0 +1,163 @@
+const path = require('path');
+const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+
+const myPort = 9001;
+
+const extractCSS = new ExtractTextPlugin({
+  filename: 'style.[contenthash].css',
+  allChunks: true,
+});
+
+const config = {
+  entry: {
+    app: './src/index.jsx',
+    vendor: ['babel-polyfill', 'whatwg-fetch', 'react-hot-loader/patch'],
+  },
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].[hash].js',
+    pathinfo: true,
+  },
+  module: {
+    rules: [
+      {
+        test: /\.s?css$/,
+        include: [path.resolve(__dirname, 'src')],
+        use: extractCSS.extract({
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                modules: true,
+                localIdentName: '[path][name]__[local]--[hash:base64:5]',
+              },
+            },
+            {
+              loader: 'sass-loader',
+              options: {
+                importLoaders: 1,
+              },
+            },
+            {
+              loader: 'postcss-loader',
+              options: {
+                plugins: loader => [require('autoprefixer')()],
+              },
+            },
+          ],
+          fallback: 'style-loader',
+        }),
+      },
+      {
+        test: /\.jsx?$/,
+        include: [path.resolve(__dirname, 'src')],
+        exclude: [path.resolve(__dirname, 'node_modules')],
+        use: [
+          {
+            loader: 'babel-loader',
+          },
+        ],
+      },
+      {
+        test: /\.(jpe?g|png|svg|gif)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            query: {
+              name: '[name].[ext]',
+            },
+          },
+          {
+            loader: 'image-webpack-loader',
+            query: {
+              progressive: true,
+              optimizationLevel: 7,
+              interlaced: false,
+              pngquant: {
+                quality: '65-90',
+                speed: 4,
+              },
+            },
+          },
+        ],
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|svg)$/,
+        use: {
+          loader: 'url-loader',
+          options: {
+            limit: 100000,
+          },
+        },
+      },
+    ],
+  },
+  resolve: {
+    extensions: ['.js', '.jsx'],
+  },
+  devtool: 'source-map',
+  plugins: [
+    new webpack.LoaderOptionsPlugin({
+      options: {
+        context: __dirname,
+      },
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: 'src/index.html',
+    }),
+    new CopyWebpackPlugin([
+      {
+        from: './src/common',
+        to: './common',
+      },
+      {
+        from: './src/config.js',
+        to: './config.js',
+      },
+    ]),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      filename: 'vendor.js',
+    }),
+    new webpack.SourceMapDevToolPlugin({
+      filename: '[name].js.map',
+      exclude: ['vendor.js'],
+    }),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': '"production"',
+    }),
+    new UglifyJSPlugin({
+      compress: {
+        sequences: true,
+        properties: true,
+        dead_code: true,
+        drop_debugger: true,
+        unsafe: false,
+        conditionals: true,
+        comparisons: true,
+        evaluate: true,
+        booleans: true,
+        loops: true,
+        unused: true,
+        hoist_vars: false,
+        if_return: true,
+        join_vars: true,
+        cascade: true,
+        side_effects: true,
+        warnings: false,
+      },
+      mangle: true,
+      sourceMap: true,
+    }),
+    extractCSS,
+  ],
+};
+
+console.log(`${process.env.NODE_ENV} mode.`);
+
+module.exports = config;
