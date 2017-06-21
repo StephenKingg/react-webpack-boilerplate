@@ -2,12 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-
-const Dashboard = require('webpack-dashboard');
-const DashboardPlugin = require('webpack-dashboard/plugin');
-const dashboard = new Dashboard();
 
 const myPort = 9001;
 
@@ -19,7 +14,7 @@ const extractCSS = new ExtractTextPlugin({
 const config = {
   entry: {
     app: './src/index.jsx',
-    vendor: ['babel-polyfill', 'whatwg-fetch', 'react-hot-loader/patch'],
+    vendor: ['whatwg-fetch'],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -107,10 +102,6 @@ const config = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': '"development"',
-    }),
-    new DashboardPlugin({
-      port: myPort,
-      handler: dashboard.setData,
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.LoaderOptionsPlugin({

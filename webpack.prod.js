@@ -15,7 +15,7 @@ const extractCSS = new ExtractTextPlugin({
 const config = {
   entry: {
     app: './src/index.jsx',
-    vendor: ['babel-polyfill', 'whatwg-fetch', 'react-hot-loader/patch'],
+    vendor: ['babel-polyfill', 'react-hot-loader/patch', 'whatwg-fetch'],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
