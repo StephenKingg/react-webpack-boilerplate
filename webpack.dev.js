@@ -2,7 +2,6 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 const myPort = 9001;
 
@@ -14,7 +13,7 @@ const extractCSS = new ExtractTextPlugin({
 const config = {
   entry: {
     app: './src/index.jsx',
-    vendor: ['whatwg-fetch'],
+    vendor: ['babel-polyfill', 'react-hot-loader/patch','whatwg-fetch'],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -62,20 +61,18 @@ const config = {
         ],
       },
       {
-        test: /\.(jpe?g|png|svg|gif)$/,
+        test: /\.(jpe?g|png|svg|gif|bmp)$/i,
         use: [
           {
             loader: 'file-loader',
-            query: {
+            options: {
               name: '[name].[ext]',
             },
           },
           {
             loader: 'image-webpack-loader',
-            query: {
+            options: {
               progressive: true,
-              optimizationLevel: 7,
-              interlaced: false,
               pngquant: {
                 quality: '65-90',
                 speed: 4,
@@ -85,7 +82,7 @@ const config = {
         ],
       },
       {
-        test: /\.(woff|woff2|eot|ttf|svg)$/,
+        test: /\.(woff|woff2|eot|ttf)$/,
         use: {
           loader: 'url-loader',
           options: {
@@ -100,9 +97,6 @@ const config = {
   },
   devtool: 'eval',
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': '"development"',
-    }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.LoaderOptionsPlugin({
       options: {
@@ -113,6 +107,14 @@ const config = {
       filename: 'index.html',
       template: 'src/index.html',
     }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      filename: 'vendor.js',
+    }),
+        new webpack.SourceMapDevToolPlugin({
+      filename: '[name].[hash].js.map',
+      exclude: ['vendor.js'],
+    }),
     extractCSS,
   ],
   devServer: {
@@ -122,12 +124,9 @@ const config = {
     port: myPort,
     host: '127.0.0.1',
     inline: true,
-    quiet: true,
     hot: true,
     open: true,
   },
 };
-
-console.log(`${process.env.NODE_ENV} mode.`);
 
 module.exports = config;

@@ -23,7 +23,7 @@
     "not ie < 9"
   ],
   "scripts": {
-    "start": "webpack-dev-server --config ./webpack.dev.js --open --progress --output-pathinfo",
+    "start": "webpack-dev-server --config ./webpack.dev.js --open --output-pathinfo --progress",
     "build": "rm -rf dist && webpack --config ./webpack.prod.js --optimize-minimize --progress",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

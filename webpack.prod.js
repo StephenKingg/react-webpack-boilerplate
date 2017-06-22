@@ -63,30 +63,41 @@ const config = {
         ],
       },
       {
-        test: /\.(jpe?g|png|svg|gif)$/,
+        test: /\.(jpe?g|png|svg|gif|bmp)$/i,
         use: [
           {
             loader: 'file-loader',
-            query: {
+            options: {
               name: '[name].[ext]',
             },
           },
           {
             loader: 'image-webpack-loader',
-            query: {
+            options: {
               progressive: true,
-              optimizationLevel: 7,
-              interlaced: false,
               pngquant: {
                 quality: '65-90',
                 speed: 4,
+              },
+              mozjpeg: {
+                quality: 65,
+              },
+              svgo: {
+                plugins: [
+                  {
+                    removeViewBox: false,
+                  },
+                  {
+                    removeEmptyAttrs: false,
+                  },
+                ],
               },
             },
           },
         ],
       },
       {
-        test: /\.(woff|woff2|eot|ttf|svg)$/,
+        test: /\.(woff|woff2|eot|ttf)$/,
         use: {
           loader: 'url-loader',
           options: {
@@ -99,7 +110,6 @@ const config = {
   resolve: {
     extensions: ['.js', '.jsx'],
   },
-  devtool: 'source-map',
   plugins: [
     new webpack.LoaderOptionsPlugin({
       options: {
@@ -125,11 +135,8 @@ const config = {
       filename: 'vendor.js',
     }),
     new webpack.SourceMapDevToolPlugin({
-      filename: '[name].js.map',
+      filename: '[name].[hash].js.map',
       exclude: ['vendor.js'],
-    }),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': '"production"',
     }),
     new UglifyJSPlugin({
       compress: {
@@ -157,7 +164,5 @@ const config = {
     extractCSS,
   ],
 };
-
-console.log(`${process.env.NODE_ENV} mode.`);
 
 module.exports = config;
