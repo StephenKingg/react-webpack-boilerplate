@@ -13,7 +13,7 @@ const extractCSS = new ExtractTextPlugin({
 const config = {
   entry: {
     app: './src/index.jsx',
-    vendor: ['babel-polyfill', 'react-hot-loader/patch','whatwg-fetch'],
+    vendor: ['babel-polyfill', 'react-hot-loader/patch', 'whatwg-fetch'],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -111,7 +111,7 @@ const config = {
       name: 'vendor',
       filename: 'vendor.js',
     }),
-        new webpack.SourceMapDevToolPlugin({
+    new webpack.SourceMapDevToolPlugin({
       filename: '[name].[hash].js.map',
       exclude: ['vendor.js'],
     }),
