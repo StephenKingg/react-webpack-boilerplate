@@ -134,9 +134,11 @@ const config = {
       name: 'vendor',
       filename: 'vendor.js',
     }),
+    extractCSS,
     new webpack.SourceMapDevToolPlugin({
+      test: /\.jsx?$/,
       filename: '[name].[hash].js.map',
-      exclude: ['vendor.js'],
+      exclude: 'vendor',
     }),
     new UglifyJSPlugin({
       compress: {
@@ -161,7 +163,6 @@ const config = {
       mangle: true,
       sourceMap: true,
     }),
-    extractCSS,
   ],
 };
 
