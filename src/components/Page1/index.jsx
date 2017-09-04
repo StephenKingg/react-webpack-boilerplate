@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import { DatePicker } from 'antd';
+
 import style from './style.scss';
 
 class Root extends Component {
@@ -21,7 +23,10 @@ class Root extends Component {
   render() {
     return (
       <div className={style.btn} role="menuitem" onClick={this.handleClick} tabIndex={0}>
-        Hello, world!JavaScript
+        <div>Hello, world!JavaScript</div>
+        <div>
+          <DatePicker />
+        </div>
       </div>
     );
   }

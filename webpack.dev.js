@@ -23,6 +23,23 @@ const config = {
   module: {
     rules: [
       {
+        test: /\.less$/,
+        include: [path.resolve(__dirname, 'node_modules/antd')],
+        use: extractCSS.extract({
+          use: [
+            {
+              loader: 'css-loader',
+              options: {},
+            },
+            {
+              loader: 'less-loader',
+              options: {},
+            },
+          ],
+          fallback: 'style-loader',
+        }),
+      },
+      {
         test: /\.s?css$/,
         include: [path.resolve(__dirname, 'src')],
         use: extractCSS.extract({
