@@ -1,8 +1,5 @@
 {
-  "plugins": [
-    "stylelint-scss",
-    "stylelint-selector-bem-pattern"
-  ],
+  "plugins": ["stylelint-scss", "stylelint-selector-bem-pattern"],
   "rules": {
     "selector-no-id": true,
     "indentation": 2,
@@ -14,28 +11,19 @@
     "rule-nested-empty-line-before": [
       "always",
       {
-        "ignore": [
-          "after-comment"
-        ],
-        "except": [
-          "first-nested"
-        ]
+        "ignore": ["after-comment"]
       }
     ],
     "rule-non-nested-empty-line-before": [
       "always",
       {
-        "ignore": [
-          "after-comment"
-        ]
+        "ignore": ["after-comment"]
       }
     ],
     "comment-empty-line-before": [
       "always",
       {
-        "ignore": [
-          "stylelint-commands"
-        ]
+        "ignore": ["stylelint-commands"]
       }
     ],
     "plugin/selector-bem-pattern": {
@@ -47,13 +35,9 @@
       "utilitySelectors": "^\\.util-[a-z]+$"
     },
     "declaration-property-value-blacklist": {
-      "/^border/": [
-        "none"
-      ]
+      "/^border/": ["none"]
     },
-    "at-rule-blacklist": [
-      "extend"
-    ],
+    "at-rule-blacklist": ["extend"],
     "max-nesting-depth": 3,
     "declaration-no-important": true,
     "selector-max-compound-selectors": 3,
@@ -63,10 +47,7 @@
     "at-rule-empty-line-before": [
       "always",
       {
-        "ignoreAtRules": [
-          "import",
-          "first-nested"
-        ]
+        "ignoreAtRules": ["import", "first-nested"]
       }
     ],
     "at-rule-name-case": "lower",
