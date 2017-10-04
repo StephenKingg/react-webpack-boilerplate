@@ -22,8 +22,8 @@ export const PAGE = {
   page4: `${publicPath}page4`,
 };
 
-const Routes = () =>
-  (<Router basename={publicPath}>
+const Routes = () => (
+  <Router basename={publicPath}>
     <div>
       <Route exact path={publicPath} component={Home} />
       <Route path={PAGE.page1} component={Page1} />
@@ -31,6 +31,7 @@ const Routes = () =>
       <Route path={PAGE.page3} component={Page3} />
       <Route path={PAGE.page4} component={Page4} />
     </div>
-  </Router>);
+  </Router>
+);
 
 export default Routes;
