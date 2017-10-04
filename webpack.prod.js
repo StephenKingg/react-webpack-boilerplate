@@ -91,12 +91,18 @@ const config = {
           {
             loader: 'image-webpack-loader',
             options: {
-              progressive: true,
+              gifsicle: {
+                interlaced: false,
+              },
+              optipng: {
+                optimizationLevel: 7,
+              },
               pngquant: {
                 quality: '65-90',
                 speed: 4,
               },
               mozjpeg: {
+                progressive: true,
                 quality: 65,
               },
               svgo: {
@@ -109,6 +115,9 @@ const config = {
                   },
                 ],
               },
+              webp: {
+                quality: 75
+              }
             },
           },
         ],

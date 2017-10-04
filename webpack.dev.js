@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const myPort = 9001;
 
@@ -89,10 +90,32 @@ const config = {
           {
             loader: 'image-webpack-loader',
             options: {
-              progressive: true,
+              gifsicle: {
+                interlaced: false,
+              },
+              optipng: {
+                optimizationLevel: 7,
+              },
               pngquant: {
                 quality: '65-90',
                 speed: 4,
+              },
+              mozjpeg: {
+                progressive: true,
+                quality: 65,
+              },
+              svgo: {
+                plugins: [
+                  {
+                    removeViewBox: false,
+                  },
+                  {
+                    removeEmptyAttrs: false,
+                  },
+                ],
+              },
+              webp: {
+                quality: 75,
               },
             },
           },
@@ -128,6 +151,7 @@ const config = {
       name: 'vendor',
       filename: 'vendor.js',
     }),
+    new BundleAnalyzerPlugin(),
     new webpack.SourceMapDevToolPlugin({
       filename: '[name].[hash].js.map',
       exclude: ['vendor.js'],
